@@ -1,0 +1,46 @@
+---
+title: "DS202-HW9"
+author: "Tessa Lanzel"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Read the Data
+```{r}
+library(tidyverse)
+library('dplyr')
+
+av <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/avengers/avengers.csv", stringsAsFactors = FALSE)
+
+View(av)
+```
+
+```{r}
+av0 = av %>% filter(Name.Alias != "")
+av1 = av0 %>% gather(key = time, value = death, c(11, 13, 15, 17, 19)) %>%
+  select(Name.Alias, time, death) %>% 
+  mutate(time = parse_number(time))
+av2 = av0 %>% gather(key = time, value = return, c(12, 14, 16, 18, 20)) %>%
+  select(Name.Alias, time, return) %>%
+  mutate(time = parse_number(time))
+av.neat = left_join(av1, av2, by = c("Name.Alias", "time"))
+View(av.neat)
+```
+
+##### The article stated:
+#####  *"Out of 173 listed Avengers, my analysis found that 69 had died at least one time after they joined the team."*  
+```{r}
+av.neat1 = av.neat %>% mutate(
+  death = as.factor(death),
+  return = as.factor(return)
+)
+
+av.neat1 = av.neat1 %>% filter(death == "YES")
+num_death_1 = av.neat1 %>% filter(time == 1) %>% filter(return == "YES") %>% count()
+num_death_1
+```
+It turns out that their analysis was incorrect when comparing it to our data set, because only 44 avengers dies at least one time after they joined the team.  
