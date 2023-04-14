@@ -44,4 +44,4 @@ av.neat1 = av.neat1 %>% filter(death == "YES")
 num_death_1 = av.neat1 %>% filter(time == 1) %>% filter(return == "YES") %>% count()
 num_death_1
 ```
-It turns out that their analysis was incorrect when comparing it to our data set, because only 44 avengers dies at least one time after they joined the team.  
+It turns out that their analysis was incorrect when comparing it to our data set, because only 44 avengers die at least one time after they joined the team.  
